@@ -8,7 +8,7 @@
 
 **A next-generation AI-powered research assistant that transforms how you discover and analyze information**
 
-[🚀 Quick Start](#-quick-setup) • [📚 Documentation](#-usage) • [🛠️ API Reference](#-api-endpoints) • [💡 Examples](#-examples) • [🤝 Contributing](#-contributing)
+[🚀 Quick Start](#-quick-setup) • [📚 Documentation](#-usage) • [🛠️ API Reference](#-api-endpoints) • [💡 Examples](#-examples) 
 
 </div>
 
