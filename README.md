@@ -110,7 +110,7 @@ research-agent/
 
 
 ### 🏠 IBM Portal Overview
-<img width="100%" alt="Dashboard" src="https://github.com/user-attachments/assets/500cfa5b-fd52-4b87-aefb-f93ab035eaf8" />
+<img width="100%" alt="Dashboard" src="[https://github.com/user-attachments/assets/500cfa5b-fd52-4b87-aefb-f93ab035eaf8](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/1.png)" />
 
 ### 🔍 Setup Interface
 <img width="100%" alt="Research Mode" src="https://github.com/user-attachments/assets/200c5eb2-b385-4e87-a0a3-d8a8f421c805" />
