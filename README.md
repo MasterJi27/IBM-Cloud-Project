@@ -2,8 +2,6 @@
 
 > A polyglot, multi‑backend AI research platform integrating IBM Watson Machine Learning to deliver fast exploratory answers, deeper conversational insights, and scalable enterprise readiness.
 
-[PPTX Overview (Architecture & Pitch)](https://1drv.ms/p/c/17d9834b0fdee341/Ea4q6xrXTepIh4Xiu09JA5YB8uUAONyPnz_k3MRBtg2t8Q?e=GKUhb2)
-
 <div align="center">
 
 ![Watson ML Research Agent](https://img.shields.io/badge/Watson%20ML-Research%20Agent-0F62FE?style=for-the-badge&logo=ibm)
