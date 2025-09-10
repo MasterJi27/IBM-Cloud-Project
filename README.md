@@ -1,497 +1,511 @@
 # 🤖 Watson ML Research Agent
-### PPTX (https://1drv.ms/p/c/17d9834b0fdee341/Ea4q6xrXTepIh4Xiu09JA5YB8uUAONyPnz_k3MRBtg2t8Q?e=GKUhb2)
+
+> A polyglot, multi‑backend AI research platform integrating IBM Watson Machine Learning to deliver fast exploratory answers, deeper conversational insights, and scalable enterprise readiness.
+
+[PPTX Overview (Architecture & Pitch)](https://1drv.ms/p/c/17d9834b0fdee341/Ea4q6xrXTepIh4Xiu09JA5YB8uUAONyPnz_k3MRBtg2t8Q?e=GKUhb2)
+
 <div align="center">
 
-![Watson ML Research Agent](https://img.shields.io/badge/Watson%20ML-Research%20Agent-blue?style=for-the-badge&logo=ibm)
+![Watson ML Research Agent](https://img.shields.io/badge/Watson%20ML-Research%20Agent-0F62FE?style=for-the-badge&logo=ibm)
 ![Version](https://img.shields.io/badge/version-1.0.0-brightgreen?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-Alpha-yellow?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-orange?style=for-the-badge)
+![Backends](https://img.shields.io/badge/backends-Python%20|%20Node%20|%20Java%20|%20Scala-green?style=for-the-badge)
+![Frontend](https://img.shields.io/badge/frontend-React-blue?style=for-the-badge&logo=react)
 
-**A next-generation AI-powered research assistant that transforms how you discover and analyze information**
+**A next‑generation AI-powered research assistant that streamlines discovery, analysis, and iterative inquiry.**
 
-[🚀 Quick Start](#-quick-setup) • [📚 Documentation](#-usage) • [🛠️ API Reference](#-api-endpoints) • [💡 Examples](#-examples) 
+[🚀 Quick Start](#-quick-setup) • [📚 Usage](#-usage) • [🛠️ API Reference](#-api-endpoints) • [🧪 Examples](#-examples) • [🛡 Security](#-security) • [🧭 Roadmap](#-roadmap)
 
 </div>
 
+---
 
-## ✨ Features
+## ✨ Core Features
 
-<table>
-<tr>
-<td>
-
-🧠 **AI-Powered Intelligence**
-- Advanced IBM Watson ML integration
-- Context-aware research capabilities
-- Intelligent query understanding
-
-</td>
-<td>
-
-🚀 **Multi-Backend Architecture**
-- Python Flask (Performance)
-- Node.js Express (Speed)
-- Java (Enterprise)
-- Scala (Functional)
-
-</td>
-</tr>
-<tr>
-<td>
-
-💬 **Dual Interaction Modes**
-- Simple Research (Quick answers)
-- Chat Mode (Conversational AI)
-- Real-time responses
-
-</td>
-<td>
-
-🎨 **Modern Frontend**
-- Responsive React interface
-- Mobile-optimized design
-- Real-time connection testing
-
-</td>
-</tr>
-</table>
+| Domain | Capability | Notes |
+|--------|-----------|-------|
+| Intelligence | Watson ML model orchestration | Pluggable deployment ID / region |
+| Interaction | Simple Research + Conversational Chat | Stateless + session-based modes |
+| Polyglot Backends | Python, Node.js, Java, Scala | Interchangeable / concurrent |
+| Load Distribution | Basic load balancer placeholder | Can evolve to NGINX / HAProxy / API gateway |
+| Frontend | React, responsive, backend selector | Connection diagnostics |
+| Extensibility | Multi-mode + tool stubs | Ready for retrieval augmentation |
+| Observability (planned) | Structured logging schema | Future: OpenTelemetry integration |
+| Dev Experience | PowerShell scripts + conventional layout | Add Bash parity (included below) |
 
 ---
-## 🏗️ Architecture Overview
 
+## 🏗 Architecture Overview
+
+### High-Level System Diagram
 ```mermaid
-graph TB
-    A[React Frontend :3000] --> B[Load Balancer]
-    B --> C[Python Backend :3000]
-    B --> D[Node.js Backend :3001]
-    B --> E[Java Backend :3002]
-    B --> F[Scala Backend :3003]
-    C --> G[IBM Watson ML API]
+flowchart TB
+    UI[React Frontend :3000] --> LB[Lightweight Balancer / Router]
+    LB --> PY[Python API :3000]
+    LB --> ND[Node API :3001]
+    LB --> JV[Java API :3002]
+    LB --> SC[Scala API :3003]
+    PY --> WML[IBM Watson ML]
+    ND --> WML
+    JV --> WML
+    SC --> WML
+    subgraph Future
+        CACHER[(Vector / Cache Layer)]
+        AUTH[(API Auth Gateway)]
+        RAG[(Retrieval Augmented Module)]
+    end
+    PY -. optional .-> CACHER
+    ND -. optional .-> CACHER
+    RAG -. future .-> WML
+```
+
+### Request Lifecycle (Simple Research)
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Router
+    participant Backend as Selected Backend
+    participant Watson as Watson ML API
+
+    User->>Frontend: Enter query
+    Frontend->>Router: POST /research
+    Router->>Backend: Forward normalized request
+    Backend->>Watson: Enriched payload (query + context)
+    Watson-->>Backend: Model inference response
+    Backend-->>Router: Result + metadata
+    Router-->>Frontend: JSON result
+    Frontend-->>User: Display formatted research answer
+```
+
+### Component Responsibilities
+```mermaid
+graph TD
+    A[Frontend UI] --> B[API Router]
+    B --> C[Python Service]
+    B --> D[Node Service]
+    B --> E[Java Service]
+    B --> F[Scala Service]
+    C --> G[Watson ML]
     D --> G
     E --> G
     F --> G
+    subgraph Cross-Cutting
+       L[Logging]
+       M[Metrics]
+       V[Config Env]
+    end
+    C --> L
+    D --> L
+    E --> L
+    F --> L
 ```
+
+---
+
 ## 📁 Project Structure
 
 ```
 research-agent/
-├── 📄 config.env                 # 🔧 Environment configuration
-├── 🐍 backend/
-│   ├── python_server.py          # 🚀 Flask server (Python 3.8+)
-│   ├── requirements.txt          # 📦 Python dependencies
-│   ├── node_server.js            # ⚡ Express server (Node.js 16+)
-│   ├── package.json              # 📦 Node.js dependencies
-│   ├── WatsonResearchAgent.java  # ☕ Java implementation (Java 11+)
-│   └── WatsonResearchAgentScala.scala # 🔥 Scala implementation (2.13+)
-├── 🎨 frontend/
-│   ├── package.json              # ⚛️ React dependencies
+├── config.env                        # Shared environment (copied or sourced)
+├── backend/
+│   ├── python_server.py              # Flask service (core reference)
+│   ├── requirements.txt              # Python dependencies
+│   ├── node_server.js                # Express implementation
+│   ├── package.json                  # Node backend dependencies
+│   ├── WatsonResearchAgent.java      # Java backend
+│   ├── WatsonResearchAgentScala.scala# Scala backend
+│   └── lib/                          # (Optional) Shared JARs / libs (gitignored)
+├── frontend/
+│   ├── package.json
 │   ├── public/
-│   │   └── index.html            # 🌐 Main HTML template
+│   │   └── index.html
 │   └── src/
-│       ├── index.js              # 🚀 React entry point
-│       ├── index.css             # 💄 Global styles
-│       └── App.js                # 🧩 Main application component
-├── ⚙️ scripts/
-│   ├── setup.ps1                 # 🔧 Automated setup (Windows)
-│   ├── run-python.ps1            # 🐍 Python server launcher
-│   ├── run-node.ps1              # ⚡ Node.js server launcher
-│   └── run-frontend.ps1          # ⚛️ React frontend launcher
-└── 📖 README.md                  # 📚 This documentation
+│       ├── App.js
+│       ├── index.js
+│       ├── index.css
+│       └── api/
+│           └── client.js            # (Suggested) fetch abstraction
+├── scripts/
+│   ├── setup.ps1
+│   ├── run-python.ps1
+│   ├── run-node.ps1
+│   ├── run-frontend.ps1
+│   ├── run-all.ps1
+│   └── run-all.sh                   # (Added suggestion) cross-platform start
+├── docs/                             # (Suggested) extra specs
+└── README.md
 ```
-## Usage
 
-1. **Start your chosen backend(s)**
-2. **Start the frontend**
-3. **Open http://localhost:3000 in your browser**
-4. **Select your backend** from the interface
-5. **Test the connection** to ensure everything is working
-6. **Start researching!**
+---
 
-## 🖼️ Screenshots & Demo
+## 🧩 Environment Configuration
 
-### 🏠 IBM Portal Overview
-<img width="100%" alt="Dashboard" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/1.png?raw=true" />
+`config.env` (sample):
+```env
+# IBM Cloud / Watson ML
+API_KEY=your_ibm_cloud_api_key
+IAM_URL=https://iam.cloud.ibm.com
+WATSON_ML_URL=https://us-south.ml.cloud.ibm.com
+DEPLOYMENT_ID=your_deployment_id
 
-### 🔍 Setup Interface
-<img width="100%" alt="Research Mode" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/2.png?raw=true" />
+# Frontend
+FRONTEND_PORT=3000
 
-### 💬 Chat Mode
-<img width="100%" alt="Chat Interface" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/3.png?raw=true" />
+# Backend Ports
+PYTHON_PORT=3000
+NODE_PORT=3001
+JAVA_PORT=3002
+SCALA_PORT=3003
 
-### ⚙️ Tools Selection
-<img width="100%" alt="Backend Configuration" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/4.png?raw=true" />
+# Logging / Mode
+LOG_LEVEL=info
+DEBUG_MODE=false
+```
 
-### 📊 Assets Dashboard
-<img width="100%" alt="Analytics" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/5.png?raw=true" />
-
-### 🔗 Deployment Testing
-<img width="100%" alt="Connection Test" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/6.png?raw=true" />
-
-### 📱 Dashboard Interface
-<img width="100%" alt="Mobile View" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/7.png?raw=true" />
-
-### 🎨 Multimode Options
-<img width="100%" alt="Theme Selection" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/8.png?raw=true" />
-
-### 📈 Multi Backend
-<img width="100%" alt="Performance Dashboard" src="https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/9.png?raw=true" />
+Backend-specific mappings (internal):
+| Variable | Python | Node | Java | Scala |
+|----------|--------|------|------|-------|
+| API Key | `API_KEY` | `process.env.API_KEY` | System prop / env | sys.env |
+| Deployment | `DEPLOYMENT_ID` | same | same | same |
+| Region URL | `WATSON_ML_URL` | same | same | same |
 
 ---
 
 ## 🚀 Quick Setup
 
-### 📋 Prerequisites
-
-<table>
-<tr>
-<th>Technology</th>
-<th>Version</th>
-<th>Purpose</th>
-<th>Installation</th>
-</tr>
-<tr>
-<td>🐍 Python</td>
-<td>3.8+</td>
-<td>Backend API</td>
-<td><code>python --version</code></td>
-</tr>
-<tr>
-<td>⚡ Node.js</td>
-<td>16+</td>
-<td>Frontend & Backend</td>
-<td><code>node --version</code></td>
-</tr>
-<tr>
-<td>☕ Java</td>
-<td>11+</td>
-<td>Enterprise Backend</td>
-<td><code>java --version</code></td>
-</tr>
-<tr>
-<td>🔥 Scala</td>
-<td>2.13+</td>
-<td>Functional Backend</td>
-<td><code>scala -version</code></td>
-</tr>
-<tr>
-<td>💻 PowerShell</td>
-<td>5.1+</td>
-<td>Automation Scripts</td>
-<td><code>$PSVersionTable.PSVersion</code></td>
-</tr>
-</table>
-
-### ⚡ One-Click Setup
-
+### Fast Path (All Services – PowerShell)
 ```powershell
-# 1️⃣ Configure your IBM Cloud API key
-# Edit config.env and replace YOUR_API_KEY_HERE with your actual key
-
-# 2️⃣ Run the magic setup script
-.\scripts\setup.ps1
-
-# 3️⃣ Access your research agent
-# Frontend: http://localhost:3000
-# Python API: http://localhost:3000
-# Node.js API: http://localhost:3001
+# Edit config.env first
+.\scripts\setup.ps1          # (Optional) dependency bootstrap
+.\scripts\run-all.ps1        # Starts Python, Node, Java*, Scala*, Frontend
+# * Java / Scala require prior manual JAR placement unless script augmented
 ```
 
-> 🎉 **That's it!** Your Watson ML Research Agent is ready to revolutionize your research experience!
+### Bash (Suggested run-all.sh)
+```bash
+#!/usr/bin/env bash
+set -e
+export $(grep -v '^#' config.env | xargs)
+
+echo "[Python] Starting..."
+( cd backend && python3 python_server.py ) &
+
+echo "[Node] Starting..."
+( cd backend && node node_server.js ) &
+
+# TODO: add Java/Scala start commands if jars compiled
+echo "[Frontend] Starting..."
+( cd frontend && npm install && npm start ) &
+wait
+```
 
 ---
 
-## 🛠️ Manual Setup (Advanced Users)
+## 🛠 Manual Setup (Per Backend)
 
-
-<summary>🔧 Click for detailed manual installation steps</summary>
-
-### 🐍 Python Backend (Recommended for AI/ML workloads)
-
-```powershell
+### Python (Flask)
+```bash
 cd backend
 pip install -r requirements.txt
-python python_server.py
+python python_server.py  # http://localhost:3000
 ```
-**🚀 Server runs on:** `http://localhost:3000`
 
-### ⚡ Node.js Backend (Fastest startup time)
-
-```powershell
+### Node.js (Express)
+```bash
 cd backend
 npm install
-node node_server.js
+node node_server.js       # http://localhost:3001
 ```
-**🚀 Server runs on:** `http://localhost:3001`
 
-### ☕ Java Backend (Enterprise-grade performance)
-
-```powershell
-cd backend
-# Download dependencies: gson.jar, okhttp.jar
+### Java
+```bash
+# Acquire dependencies: gson.jar, okhttp.jar (consider Maven/Gradle later)
 javac -cp "gson.jar:okhttp.jar" WatsonResearchAgent.java
-java -cp ".:gson.jar:okhttp.jar" WatsonResearchAgent
+java  -cp ".:gson.jar:okhttp.jar" WatsonResearchAgent  # http://localhost:3002
 ```
-**🚀 Server runs on:** `http://localhost:3002`
 
-### 🔥 Scala Backend (Functional programming excellence)
-
-```powershell
-cd backend
-# Download dependencies: scalaj-http.jar, play-json.jar
+### Scala
+```bash
+# Acquire libs: scalaj-http.jar, play-json.jar
 scalac -cp "scalaj-http.jar:play-json.jar" WatsonResearchAgentScala.scala
-scala -cp ".:scalaj-http.jar:play-json.jar" WatsonResearchAgentScala
+scala  -cp ".:scalaj-http.jar:play-json.jar" WatsonResearchAgentScala  # :3003
 ```
-**🚀 Server runs on:** `http://localhost:3003`
 
-### ⚛️ React Frontend
-
-```powershell
+### Frontend (React)
+```bash
 cd frontend
 npm install
-npm start
+npm start  # http://localhost:3000
 ```
-**🎨 Frontend available at:** `http://localhost:3000`
-
-
 
 ---
 
-## 🎯 Usage
+## 🎯 Usage Modes
 
-### 🔍 Simple Research Mode
-Perfect for quick, focused research queries:
-
-```javascript
-// Example API call
-POST /research
-{
-  "query": "Explain quantum computing applications in machine learning",
-  "context": "Focus on practical implementations in 2024"
-}
-```
-
-### 💬 Chat Mode
-Engage in dynamic, conversational research:
-
-```javascript
-// Example chat interaction
-POST /chat
-{
-  "message": "What are the latest breakthroughs in AI?",
-  "conversation_id": "unique-session-id"
-}
-```
-
-### 🎮 Getting Started
-
-1. **🚀 Launch your preferred backend**
-2. **🎨 Start the React frontend**
-3. **🌐 Open `http://localhost:3000`**
-4. **⚙️ Select your backend from the dropdown**
-5. **🔍 Test the connection** (green = success!)
-6. **🧠 Start your research journey!**
+| Mode | Endpoint | Input | Typical Use |
+|------|----------|-------|-------------|
+| Simple Research | POST `/research` | `query`, optional `context` | One-shot factual answer |
+| Conversational Chat | POST `/chat` | `message`, `conversation_id` | Iterative exploration |
+| Health | GET `/health` | - | Readiness & liveness |
+| Connectivity Test | GET `/test-connection` | - | Validate Watson ML credentials |
 
 ---
 
 ## 🔌 API Endpoints
 
-<table>
-<tr>
-<th>Endpoint</th>
-<th>Method</th>
-<th>Purpose</th>
-<th>Response</th>
-</tr>
-<tr>
-<td><code>/health</code></td>
-<td>GET</td>
-<td>🏥 Health check</td>
-<td><code>{"status": "healthy"}</code></td>
-</tr>
-<tr>
-<td><code>/research</code></td>
-<td>POST</td>
-<td>🔍 Simple research query</td>
-<td><code>{"result": "AI response"}</code></td>
-</tr>
-<tr>
-<td><code>/chat</code></td>
-<td>POST</td>
-<td>💬 Conversational interaction</td>
-<td><code>{"response": "Chat reply"}</code></td>
-</tr>
-<tr>
-<td><code>/test-connection</code></td>
-<td>GET</td>
-<td>🔗 Watson ML connectivity test</td>
-<td><code>{"connected": true}</code></td>
-</tr>
-</table>
+### POST /research
+Request:
+```json
+{
+  "query": "Explain quantum computing applications in machine learning",
+  "context": "Focus on practical implementations in 2024"
+}
+```
+Response (example):
+```json
+{
+  "result": "Quantum computing enables improved optimization...",
+  "tokens_used": 512,
+  "model": "watson-ml-deployment",
+  "latency_ms": 423
+}
+```
 
----
+### POST /chat
+Request:
+```json
+{
+  "conversation_id": "session-abc123",
+  "message": "What are the latest breakthroughs in AI?"
+}
+```
+Response:
+```json
+{
+  "response": "Recent breakthroughs include...",
+  "conversation_id": "session-abc123",
+  "turn": 4,
+  "latency_ms": 389
+}
+```
 
-## ⚙️ Configuration
+### GET /health
+```json
+{ "status": "healthy", "uptime_s": 734 }
+```
 
-Edit `config.env` to customize your setup:
-
-```env
-# 🔑 IBM Cloud Credentials
-API_KEY=your_watson_ml_api_key_here
-DEPLOYMENT_ID=your_deployment_id
-WATSON_ML_URL=https://us-south.ml.cloud.ibm.com
-IAM_URL=https://iam.cloud.ibm.com
-
-# 🌐 Server Configuration
-PORT=3000
-DEBUG_MODE=false
-LOG_LEVEL=info
-
-# 🎨 Frontend Configuration
-REACT_APP_API_URL=http://localhost:3000
-REACT_APP_THEME=dark
+### GET /test-connection
+```json
+{ "connected": true, "deployment_id": "your_deployment_id" }
 ```
 
 ---
 
-## 🚨 Troubleshooting
+## 💬 Frontend Flow
 
-<details>
-<summary>🔧 Common Issues & Solutions</summary>
-
-### 🔗 Connection Problems
-
-| Issue | Solution |
-|-------|----------|
-| ❌ API Key Invalid | Verify your IBM Cloud API key in `config.env` |
-| 🚫 Port Already in Use | Change port in configuration or kill existing process |
-| 🔥 Firewall Blocking | Add exception for ports 3000-3003 |
-| 🌐 CORS Issues | Ensure frontend and backend URLs match |
-
-### 🐍 Python Backend Issues
-
-```powershell
-# Install dependencies
-pip install -r requirements.txt
-
-# Check Python version
-python --version  # Should be 3.8+
-
-# Virtual environment (recommended)
-python -m venv venv
-venv\Scripts\activate
-```
-
-### ⚡ Node.js Backend Issues
-
-```powershell
-# Clear npm cache
-npm cache clean --force
-
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-
-# Check Node version
-node --version  # Should be 16+
-```
-
-### ☕ Java Backend Issues
-
-```powershell
-# Check Java installation
-java --version  # Should be 11+
-
-# Set JAVA_HOME
-$env:JAVA_HOME = "C:\Program Files\Java\jdk-11.0.x"
-
-# Download required JARs
-# - gson-2.8.9.jar
-# - okhttp-4.9.3.jar
-```
-
-### 🔥 Scala Backend Issues
-
-```powershell
-# Check Scala installation
-scala -version  # Should be 2.13+
-
-# Download required JARs
-# - scalaj-http_2.13-2.4.2.jar
-# - play-json_2.13-2.9.2.jar
-```
-
-</details>
+1. User selects backend (Python / Node / Java / Scala) in dropdown.  
+2. Frontend stores selection (state or localStorage).  
+3. All API calls dynamically route to `http://localhost:<port>/...`.  
+4. Connection test triggers `/test-connection` prior to first research call.  
+5. Chat mode stores `conversation_id` (UUID) for continuity.
 
 ---
 
-## 💡 Examples
+## 🧪 Examples
 
-<details>
-<summary>🎯 Real-world usage examples</summary>
-
-### 📊 Market Research
-```
-Query: "Analyze the current state of electric vehicle adoption globally"
-Context: "Focus on 2024 data, include major manufacturers and market trends"
-```
-
-### 🧬 Scientific Research
-```
-Query: "Latest developments in CRISPR gene editing technology"
-Context: "Emphasize clinical applications and recent breakthroughs"
+### JavaScript (Browser Fetch)
+```js
+async function ask(query) {
+  const res = await fetch('http://localhost:3000/research', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query })
+  });
+  return res.json();
+}
 ```
 
-### 📈 Business Analysis
-```
-Query: "Impact of AI on software development productivity"
-Context: "Include metrics, case studies, and future predictions"
-```
-
-### 🎓 Academic Research
-```
-Query: "Sustainable energy solutions for developing countries"
-Context: "Focus on cost-effective and scalable technologies"
+### Python (Client Script)
+```python
+import requests
+resp = requests.post("http://localhost:3000/research",
+                     json={"query": "Applications of transformers in finance"})
+print(resp.json())
 ```
 
-</details>
+### Curl
+```bash
+curl -X POST http://localhost:3000/research \
+  -H "Content-Type: application/json" \
+  -d '{"query":"Impact of AI on healthcare analytics"}'
+```
 
 ---
 
-## 🚀 Performance Benchmarks
+## 🖼 Screens & Demo (From IBM Cloud Project)
 
-<table>
-<tr>
-<th>Backend</th>
-<th>Startup Time</th>
-<th>Response Time</th>
-<th>Memory Usage</th>
-<th>Best For</th>
-</tr>
-<tr>
-<td>🐍 Python</td>
-<td>2.3s</td>
-<td>450ms</td>
-<td>85MB</td>
-<td>AI/ML Workloads</td>
-</tr>
-<tr>
-<td>⚡ Node.js</td>
-<td>0.8s</td>
-<td>320ms</td>
-<td>42MB</td>
-<td>Rapid Development</td>
-</tr>
-<tr>
-<td>☕ Java</td>
-<td>3.1s</td>
-<td>280ms</td>
-<td>128MB</td>
-<td>Enterprise Scale</td>
-</tr>
-<tr>
-<td>🔥 Scala</td>
-<td>2.7s</td>
-<td>310ms</td>
-<td>156MB</td>
-<td>Functional Programming</td>
-</tr>
-</table>
+| View | Screenshot |
+|------|------------|
+| Portal Overview | ![Portal](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/1.png?raw=true) |
+| Setup Interface | ![Setup](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/2.png?raw=true) |
+| Chat Mode | ![Chat](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/3.png?raw=true) |
+| Tools Selection | ![Tools](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/4.png?raw=true) |
+| Assets Dashboard | ![Assets](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/5.png?raw=true) |
+| Deployment Test | ![Test](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/6.png?raw=true) |
+| Mobile View | ![Mobile](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/7.png?raw=true) |
+| Multimode | ![Modes](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/8.png?raw=true) |
+| Multi Backend | ![Backends](https://github.com/MasterJi27/IBM-Cloud-Project/blob/main/backend/9.png?raw=true) |
+
+---
+
+## 📊 (Indicative) Performance Snapshot
+
+| Backend | Startup Time* | Median Latency* | Notes |
+|---------|---------------|----------------|-------|
+| Python | ~2.3s | 450 ms | ML-friendly libs |
+| Node.js | ~0.8s | 320 ms | Fast I/O |
+| Java | ~3.1s | 280 ms | JIT warms up |
+| Scala | ~2.7s | 310 ms | Functional style |
+
+*Numbers are illustrative; measure with your environment + real Watson deployment.
+
+Suggested measurement:
+```bash
+autocannon -m POST -H "Content-Type: application/json" \
+  -b '{"query":"test"}' http://localhost:3000/research
+```
+
+---
+
+## 🛡 Security
+
+| Area | Current | Roadmap |
+|------|---------|---------|
+| API Keys | Stored in `config.env` | Vault / Secrets Manager |
+| Auth | None (local dev) | API key / OAuth / JWT |
+| Rate Limiting | None | Token bucket per IP |
+| Logging | Console prints | Structured JSON, correlation IDs |
+| Transport | HTTP local | HTTPS reverse proxy |
+| Input Validation | Minimal | JSON schema / sanitation |
+| Conversation Privacy | In-memory | TTL cache / encrypted store |
+
+Security Checklist (future):
+- Add WAF/Gateway (e.g., Kong / Envoy)
+- Integrate IAM token retrieval caching
+- Centralize redaction for PII fields
+
+---
+
+## 🧱 Suggested Enhancements
+
+| Category | Idea | Benefit |
+|----------|------|---------|
+| Retrieval | Embed & vector store (e.g., Milvus / pgvector) | Domain grounding |
+| Persistence | Conversation history in SQLite/Postgres | Long sessions |
+| Observability | Add OpenTelemetry spans | Trace latencies |
+| Model Routing | Confidence-based fallback | Robustness |
+| Frontend | Offline queue + retry | Resilience |
+| Deployment | Docker Compose | Consistent environment |
+| CI/CD | GitHub Actions (lint/test/build) | Automation |
+| Testing | Contract tests per backend | Reliability |
+
+---
+
+## 🧪 Testing Strategy (Proposed)
+
+| Layer | Tool | Focus |
+|-------|------|-------|
+| Python | pytest + requests | Endpoint logic |
+| Node | Jest / Supertest | API contract |
+| Java | JUnit | Business logic |
+| Scala | ScalaTest | Functional correctness |
+| Contract | OpenAPI mock checks | Consistency |
+| Frontend | React Testing Library | UI / state |
+| Load | k6 / autocannon | Throughput |
+
+---
+
+## 🧾 Logging & Observability (Blueprint)
+
+Standard log JSON shape:
+```json
+{
+  "ts": "2025-09-10T04:05:10Z",
+  "service": "python-backend",
+  "endpoint": "/research",
+  "latency_ms": 423,
+  "status": 200,
+  "tokens_used": 512,
+  "conversation_id": "session-abc123"
+}
+```
+
+---
+
+## 🐞 Troubleshooting Quick Reference
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| 401 from Watson | Expired IAM token | Refresh token logic / verify API key |
+| Timeout | Network / large payload | Add timeout & retries |
+| CORS error | Missing headers | Add `Access-Control-Allow-Origin: *` (dev) |
+| Java classpath errors | Missing JARs | Confirm `-cp` includes dependencies |
+| Scala JSON parse fail | Play JSON mismatch | Align case class fields with response |
+
+---
+
+## 🤝 Contributing
+
+1. Fork repository
+2. Create feature branch: `git checkout -b feat/<name>`
+3. Implement + add/update docs
+4. Run linters/tests (when available)
+5. Commit: `git commit -m "feat: <summary>"`
+6. Push & open PR
+
+Coding Guidelines:
+- Keep per-backend logic symmetric (avoid drift)
+- Add new endpoints consistently across all languages
+- Document any environment additions in README + `config.env.example`
+- Prefer pure functions for transformation layers
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) once added.
+
+MIT Template (add to LICENSE file):
+```
+MIT License
+
+Copyright (c) 2025 ...
+
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+```
+
+---
+
+## 🧭 Roadmap
+
+| Milestone | Goals |
+|-----------|-------|
+| M1 | Stabilize multi-backend parity & logs |
+| M2 | Add OpenAPI spec + contract tests |
+| M3 | Docker Compose + CI pipeline |
+| M4 | RAG integration + caching |
+| M5 | Auth & rate limiting |
+| M6 | Observability stack (metrics + traces) |
+
+---
+
+## 🙌 Acknowledgments
+Thanks to IBM Watson ML ecosystem and open-source communities in Python, JavaScript, Java, Scala.  
+Your stars and feedback accelerate future improvements.
+
+---
+
+<p align="center"><strong>Built for exploration, engineered for extensibility.</strong></p>
+<p align="right"><sub>Last Updated: 2025-09-10</sub></p>
